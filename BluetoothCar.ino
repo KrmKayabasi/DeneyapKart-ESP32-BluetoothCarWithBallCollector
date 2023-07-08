@@ -11,20 +11,22 @@ BluetoothSerial bt_iletisim;
 
 #define sol_ileri D14
 #define sol_geri D15
-
-
+#define sol_hiz 21
+#define sag_hiz 20
 #define sag_ileri D12
 #define sag_geri D13
 Servo servo1;
 Servo servo2;
 Servo servo3;
 Servo servo4;
-int angleStep = 5; // Açı adımı
+
+int angleStep = 20; // Açı adımı
 // Delay değeri
 int delayTime = 1; //ms
+int hiz =125;
 void setup() {
   // put your setup code here, to run once:
-  bt_iletisim.begin("AG");
+  bt_iletisim.begin("KGS");
     servo1.attach(D9);
   servo2.attach(D8);
   servo3.attach(D0);
@@ -34,7 +36,7 @@ void setup() {
   pinMode(sag_ileri, OUTPUT);
   pinMode(sol_geri, OUTPUT);
   pinMode(sag_geri, OUTPUT);
-  
+ 
 }
 
 
@@ -195,6 +197,7 @@ void geri()
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 0);
 
+
 }
 
 void ileri()
@@ -213,6 +216,7 @@ void sag()
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 1);
 
+
 }
 
 void sol()
@@ -221,6 +225,7 @@ void sol()
   digitalWrite(sag_ileri, 1);
   digitalWrite(sol_geri, 1);
   digitalWrite(sag_geri, 0);
+
 
 }
 
