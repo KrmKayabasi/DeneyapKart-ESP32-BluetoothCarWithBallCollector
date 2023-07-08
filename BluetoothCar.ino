@@ -1,156 +1,42 @@
 
-
-/*
-Kepçe indir a
-Kepçe Kaldır b
-Kapçe Sıkıştır s
-Kepçe bırak j daha koda eklenmedi
-Sağa dön basıldığı sürece c
-Sola dön basıldığı sürece d
-Sağa dön 90 e
-Sola dön 90 f
-Sağa dön 180 g
-Sola dön 180 h
-Yukarı-Joystick 1
-Aşağı-Joystick 3
-Sağ-Joystick 2
-Sol-Joystick 4
-*/
-
+#include <BluetoothSerial.h>
 
 #include <Servo.h>
-#include<SoftwareSerial.h>
-
-SoftwareSerial bt_iletisim(2, 3);
-
-#define sol_ileri 4
-#define sol_geri 8
 
 
-#define sag_ileri 12
-#define sag_geri 13
+BluetoothSerial bt_iletisim;
 
 
-int motorlar_hiz = 255;
-byte son_islem;
+#include <deneyap.h>
 
+#define sol_ileri D14
+#define sol_geri D15
+
+
+#define sag_ileri D12
+#define sag_geri D13
 Servo servo1;
 Servo servo2;
 Servo servo3;
 Servo servo4;
-
-// Açı değerleri
-int servo1StartAngle = 180;
-int servo1EndAngle = 0;
-int servo2StartAngle = 0;
-int servo2EndAngle =180;
-
 int angleStep = 5; // Açı adımı
 // Delay değeri
 int delayTime = 1; //ms
-
-
 void setup() {
-  servo1.attach(9);
-  servo2.attach(10);
-  servo3.attach(6);
-  servo4.attach(11);
-  Serial.begin(38400);
+  // put your setup code here, to run once:
+  bt_iletisim.begin("AG");
+    servo1.attach(D9);
+  servo2.attach(D8);
+  servo3.attach(D0);
+  servo4.attach(D4);
+  Serial.begin(2400);
   pinMode(sol_ileri, OUTPUT);
   pinMode(sag_ileri, OUTPUT);
   pinMode(sol_geri, OUTPUT);
   pinMode(sag_geri, OUTPUT);
   
-
-  bt_iletisim.begin(38400);
-
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  if(bt_iletisim.available() > 0){
-    char mesaj = bt_iletisim.read();
-    
-
-    //Kepçe İndir a
-    if(mesaj == 'a'){
-      kepceindir();
-      bt_iletisim.println(mesaj);
-
-    }
-    //Kepçe Kaldır b
-    if(mesaj == 'b'){
-      kepcekaldir();
-      bt_iletisim.println(mesaj);
-
-    }
-    //Kepçe Sıkıştır s
-    if(mesaj == 's'){
-      kepcesikistir();
-      bt_iletisim.println(mesaj);
-    }
-
-    //Kepçe Bırak m
-    if(mesaj == 'm'){
-      kepcebirak();
-      bt_iletisim.println(mesaj);
-    }
-/*
-    //Sağa dön basıldığı sürece c 
-    if(mesaj == 'c'){
- 
-
-    }
-    //Sola dön basıldığı sürece d
-    if(mesaj == 'd'){
-
-
-    }
-*/
-    //Sağa dön 90 e
-    if(mesaj == 'e'){
-      bt_iletisim.println(mesaj);
-
-    }
-    //Sola dön 90 f
-    if(mesaj == 'f'){
-      bt_iletisim.println(mesaj);
-
-    }
-
-    //Sağa dön 180 g
-    if(mesaj == 'g'){
-      bt_iletisim.println(mesaj);
-
-    }
-    //Sola dön 180 h
-    if(mesaj == 'h'){
-      bt_iletisim.println(mesaj);
-
-    }
-    //Yukarı-Joystick 1
-    if(mesaj == '1'){
-      ileri();
-      bt_iletisim.println(mesaj);
-    }
-    //Aşağı-Joystick 3
-    if(mesaj == '3'){
-      geri();
-      bt_iletisim.println(mesaj);
-    }
-
-    //Sağ-Joystick 2
-    if(mesaj == '2'){
-      sag();
-      bt_iletisim.println(mesaj);
-    }
-    //Sol-Joystick 4
-    if(mesaj == '4'){
-      sol();
-      bt_iletisim.println(mesaj);
-    }
-  }
-}
 
 void kepcesikistir() {
   for (int angle = 180; angle >= 0; angle -= angleStep) {
@@ -205,38 +91,137 @@ void kepceindir() {
  }
 }
 
-//---------------------------------------------------------------------
+void loop() {
+if(bt_iletisim.available() > 0){
+    char mesaj = bt_iletisim.read();
+    Serial.println(mesaj);
+    
 
-void ileri()
-{
-  digitalWrite(sol_ileri, 1);
-  digitalWrite(sag_ileri, 1);
-  digitalWrite(sol_geri, 0);
-  digitalWrite(sag_geri, 0);
+    //Kepçe İndir a
+    if(mesaj == 'a'){
+      kepceindir();
+      bt_iletisim.println(mesaj);
+
+    }
+    //Kepçe Kaldır b
+    if(mesaj == 'b'){
+      kepcekaldir();
+      bt_iletisim.println(mesaj);
+
+    }
+    //Kepçe Sıkıştır s
+    if(mesaj == 's'){
+      kepcesikistir();
+      bt_iletisim.println(mesaj);
+    }
+
+    //Kepçe Bırak m
+    if(mesaj == 'm'){
+      kepcebirak();
+      bt_iletisim.println(mesaj);
+    }
+
+    //Sağa dön basıldığı sürece c 
+    if(mesaj == 'c'){
+      dur();
+
+    }
+    //Sola dön basıldığı sürece d
+    if(mesaj == 'd'){
+      dur();
+
+    }
+
+    //Sağa dön 90 e
+    if(mesaj == 'e'){
+      bt_iletisim.println(mesaj);
+
+    }
+    //Sola dön 90 f
+    if(mesaj == 'f'){
+      bt_iletisim.println(mesaj);
+
+    }
+
+    //Sağa dön 180 g
+    if(mesaj == 'g'){
+      bt_iletisim.println(mesaj);
+
+    }
+    //Sola dön 180 h
+    if(mesaj == 'h'){
+      bt_iletisim.println(mesaj);
+
+    }
+    //Yukarı-Joystick 1
+    if(mesaj == '1'){
+      dur();
+      delay(10);
+      ileri();
+      bt_iletisim.println(mesaj);
+    }
+    //Aşağı-Joystick 3
+    if(mesaj == '3'){
+      dur();
+      delay(10);
+      geri();
+      bt_iletisim.println(mesaj);
+    }
+
+    //Sağ-Joystick 2
+    if(mesaj == '2'){
+      dur();
+      delay(10);
+      sag();
+      bt_iletisim.println(mesaj);
+    }
+    //Sol-Joystick 4
+    if(mesaj == '4'){
+      dur();
+      delay(10);
+      sol();
+      bt_iletisim.println(mesaj);
+    }
+
+    
+  }
+
 }
 
 void geri()
 {
+  digitalWrite(sol_ileri, 1);
+  digitalWrite(sag_ileri, 1);
+  digitalWrite(sol_geri, 0);
+  digitalWrite(sag_geri, 0);
+
+}
+
+void ileri()
+{
   digitalWrite(sol_ileri, 0);
   digitalWrite(sag_ileri, 0);
   digitalWrite(sol_geri, 1);
   digitalWrite(sag_geri, 1);
+
 }
 
-void sol()
+void sag()
 {
   digitalWrite(sol_ileri, 1);
   digitalWrite(sag_ileri, 0);
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 1);
+
 }
 
-void sag()
+void sol()
 {
   digitalWrite(sol_ileri, 0);
   digitalWrite(sag_ileri, 1);
   digitalWrite(sol_geri, 1);
   digitalWrite(sag_geri, 0);
+
 }
 
 void dur()
@@ -245,4 +230,5 @@ void dur()
   digitalWrite(sag_ileri, 0);
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 0);
+
 }
