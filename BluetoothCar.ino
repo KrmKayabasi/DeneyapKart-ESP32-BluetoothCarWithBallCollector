@@ -11,8 +11,7 @@ BluetoothSerial bt_iletisim;
 
 #define sol_ileri D14
 #define sol_geri D15
-#define sol_hiz 21
-#define sag_hiz 20
+
 #define sag_ileri D12
 #define sag_geri D13
 Servo servo1;
@@ -22,12 +21,12 @@ Servo servo4;
 
 int angleStep = 20; // Açı adımı
 // Delay değeri
-int delayTime = 1; //ms
+int delayTime = 3; //ms
 int hiz =125;
 void setup() {
   // put your setup code here, to run once:
   bt_iletisim.begin("KGS");
-    servo1.attach(D9);
+  servo1.attach(D9);
   servo2.attach(D8);
   servo3.attach(D0);
   servo4.attach(D4);
@@ -54,7 +53,7 @@ void kepcesikistir() {
 }
 
 void kepcekaldir() {
-  for (int angle = 110; angle >= 35; angle -= angleStep) {
+  for (int angle = 110; angle >= 15; angle -= angleStep) {
     servo3.write(angle); // 180,179
     servo4.write(180 - (angle));
     delay(delayTime);
@@ -81,7 +80,7 @@ void kepcebirak() {
 
 
 void kepceindir() {
-  for (int angle = 35; angle <= 110; angle += angleStep) {
+  for (int angle = 15; angle <= 110; angle += angleStep) {
     servo3.write(angle);
     servo4.write(180 - (angle));
     delay(delayTime);
