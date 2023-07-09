@@ -1,12 +1,5 @@
-
 #include <BluetoothSerial.h>
-
 #include <Servo.h>
-
-
-BluetoothSerial bt_iletisim;
-
-
 #include <deneyap.h>
 
 #define sol_ileri D14
@@ -14,15 +7,20 @@ BluetoothSerial bt_iletisim;
 
 #define sag_ileri D12
 #define sag_geri D13
+
+BluetoothSerial bt_iletisim;
+
 Servo servo1;
 Servo servo2;
 Servo servo3;
 Servo servo4;
-
-int angleStep = 20; // Açı adımı
+// Açı adımı
+int angleStep = 20; 
 // Delay değeri
-int delayTime = 3; //ms
+int delayTime = 1; 
+// Hız Değeri
 int hiz =125;
+
 void setup() {
   // put your setup code here, to run once:
   bt_iletisim.begin("KGS");
@@ -35,9 +33,7 @@ void setup() {
   pinMode(sag_ileri, OUTPUT);
   pinMode(sol_geri, OUTPUT);
   pinMode(sag_geri, OUTPUT);
- 
 }
-
 
 void kepcesikistir() {
   for (int angle = 180; angle >= 0; angle -= angleStep) {
@@ -78,9 +74,8 @@ void kepcebirak() {
  }
 }
 
-
 void kepceindir() {
-  for (int angle = 15; angle <= 110; angle += angleStep) {
+  for (int angle = 15; angle <= 110; angle += 95) {
     servo3.write(angle);
     servo4.write(180 - (angle));
     delay(delayTime);
@@ -96,8 +91,7 @@ void loop() {
 if(bt_iletisim.available() > 0){
     char mesaj = bt_iletisim.read();
     Serial.println(mesaj);
-    
-
+  
     //Kepçe İndir a
     if(mesaj == 'a'){
       kepceindir();
@@ -136,57 +130,56 @@ if(bt_iletisim.available() > 0){
     //Sağa dön 90 e
     if(mesaj == 'e'){
       bt_iletisim.println(mesaj);
+      dur();
 
     }
     //Sola dön 90 f
     if(mesaj == 'f'){
       bt_iletisim.println(mesaj);
-
+      dur();
     }
 
     //Sağa dön 180 g
     if(mesaj == 'g'){
       bt_iletisim.println(mesaj);
-
+      dur();
     }
     //Sola dön 180 h
     if(mesaj == 'h'){
       bt_iletisim.println(mesaj);
-
+      dur();
     }
     //Yukarı-Joystick 1
     if(mesaj == '1'){
-      dur();
-      delay(10);
+      
       ileri();
+      delay(200);
+      dur();
       bt_iletisim.println(mesaj);
     }
     //Aşağı-Joystick 3
     if(mesaj == '3'){
-      dur();
-      delay(10);
       geri();
+      delay(200);
+      dur();
       bt_iletisim.println(mesaj);
     }
 
     //Sağ-Joystick 2
     if(mesaj == '2'){
-      dur();
-      delay(10);
       sag();
+      delay(200);
+      dur();
       bt_iletisim.println(mesaj);
     }
     //Sol-Joystick 4
     if(mesaj == '4'){
-      dur();
-      delay(10);
       sol();
+      delay(200);
+      dur();
       bt_iletisim.println(mesaj);
     }
-
-    
   }
-
 }
 
 void geri()
@@ -195,8 +188,6 @@ void geri()
   digitalWrite(sag_ileri, 1);
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 0);
-
-
 }
 
 void ileri()
@@ -205,7 +196,6 @@ void ileri()
   digitalWrite(sag_ileri, 0);
   digitalWrite(sol_geri, 1);
   digitalWrite(sag_geri, 1);
-
 }
 
 void sag()
@@ -214,8 +204,6 @@ void sag()
   digitalWrite(sag_ileri, 0);
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 1);
-
-
 }
 
 void sol()
@@ -224,8 +212,6 @@ void sol()
   digitalWrite(sag_ileri, 1);
   digitalWrite(sol_geri, 1);
   digitalWrite(sag_geri, 0);
-
-
 }
 
 void dur()
@@ -234,5 +220,4 @@ void dur()
   digitalWrite(sag_ileri, 0);
   digitalWrite(sol_geri, 0);
   digitalWrite(sag_geri, 0);
-
 }
